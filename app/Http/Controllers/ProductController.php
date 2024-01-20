@@ -125,8 +125,6 @@ class ProductController extends Controller
             return response()->json('success',200);
         } else {
             return response()->json('failed',404);
-        }
-        
-        
+        }        
     }
 }

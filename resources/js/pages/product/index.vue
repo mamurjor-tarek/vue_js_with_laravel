@@ -54,8 +54,8 @@ export default {
                 this.products = response.data;
             });
         },
-        productDelete(id){
-            axios.delete(`api/product/${id}`)
+        async productDelete(id){
+            await axios.delete(`api/product/${id}`)
             .then(() => {
                 toast.success('Product Deleted successfully!',{
                     autoClose:3000,

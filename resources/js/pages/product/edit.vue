@@ -78,10 +78,10 @@ export default {
             let id = this.$route.params.id;
             this.form.post(`/api/product/${id}`)
             .then(({data}) => {
+                this.image = `/${data.image}`;
                 toast.success('Product updated successfully!',{
                     autoClose:3000,
                 });
-                location.reload();
             });
         }
     },
