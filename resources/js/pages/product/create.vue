@@ -4,11 +4,11 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">Create Category</h5>
+                        <h5 class="mb-0">Create Product</h5>
                         <router-link :to="{name: 'ProductIndex'}" class="btn btn-sm btn-primary">Product List</router-link>
                     </div>
                     <div class="card-body">
-                        <form @submit.prevent="createCategory">
+                        <form @submit.prevent="createProduct" enctype="multipart/form-data">
                             <div class="mb-3">
                                 <label for="title" class="form-label">Title</label>
                                 <input id="title" type="text" v-model="form.title" :class="{'is-invalid' : form.errors.has('title')}" name="title" class="form-control" placeholder="Title">
@@ -22,7 +22,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="image" class="form-label">Image</label>
-                                <input id="image" type="file" v-on.change="handleFile" :class="{'is-invalid' : form.errors.has('image')}" name="image" class="form-control" placeholder="Image">
+                                <input id="image" type="file" :class="{'is-invalid' : form.errors.has('image')}" name="image" class="form-control" placeholder="Image" @change="handleFile">
                                 <HasError :form="form" field="image" />
                             </div>
                             
@@ -59,12 +59,8 @@ export default {
     },
     methods: {
         handleFile (event) {
-            // We'll grab just the first file...
-            // You can also do some client side validation here.
-            const file = event.target.files[0]
-
-            // Set the file object onto the form...
-            this.form.file = file
+            const file = event.target.files[0];
+            this.form.image = file;
         },
         createProduct(){
             // axios.post('/api/Product',{name: this.name}).then(response => {
@@ -72,9 +68,11 @@ export default {
             //     this.name = '';
             // });
 
-            this.form.post('/api/product')
-            .then(({ data }) => {
-                this.form.name = '';
+            this.form.post('/api/product').then(({ data }) => {
+                this.form.title = '';
+                this.form.price = '';
+                this.form.image = null;
+                this.form.description = '';
                 toast.success('Product created successfully!',{
                     autoClose:3000,
                 });

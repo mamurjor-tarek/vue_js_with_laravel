@@ -6,21 +6,32 @@
                 <router-link :to="{name: 'ProductCreate'}" class="btn btn-sm btn-primary">Create</router-link>
             </div>
             <div class="card-body">
-                <table class="table">
+                <table class="table table-striped table-hover">
                     <thead>
                         <th style="width:100px">Sl</th>
-                        <th>Name</th>
-                        <th>Slug</th>
+                        <th>Image</th>
+                        <th>Title</th>
+                        <th>Price</th>
                         <th style="width:150px;" class="text-end">Action</th>
                     </thead>
-                    <tbody>
-                        <tr v-for="(category, key) in categories" ::key="category.id">
+                    <tbody v-if="products.length">
+                        <tr v-for="(product, key) in products" :key="product.id">
                             <td style="width:100px">{{ key+1 }}</td>
-                            <td>{{ category.name }}</td>
-                            <td>{{ category.slug }}</td>
+                            <td>
+                                <img style="width:100px;" :src="product.image" >
+                            </td>
+                            <td>{{ product.title }}</td>
+                            <td>{{ product.price }}</td>
                             <td style="width:150px" class="text-end">
-                                <router-link :to="{name: 'CategoryEdit',params:{id:category.id}}" class="btn btn-sm btn-info me-2">Edit</router-link>
-                                <a @click.prevent="deleteCategory(category.id)" href="" class="btn btn-sm btn-danger">Delete</a>
+                                <router-link :to="{name: 'ProductEdit',params:{id:product.id}}" class="btn btn-sm btn-info me-2">Edit</router-link>
+                                <a @click.prevent="productDelete(product.id)" class="btn btn-sm btn-danger">Delete</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tbody v-else>
+                        <tr>
+                            <td colspan="5">
+                                <h5 class="text-danger text-center">No Products Found!</h5>
                             </td>
                         </tr>
                     </tbody>
@@ -34,28 +45,28 @@ import { toast } from 'vue3-toastify';
 export default {
     data() {
         return {
-            categories: [],
+            products: [],
         }
     },
     methods: {
-        showCategories (){
-            axios.get('/api/category').then(response => {
-                this.categories = response.data;
+        show (){
+            axios.get('/api/product').then(response => {
+                this.products = response.data;
             });
         },
-        deleteCategory(id){
-            axios.delete(`api/category/${id}`)
+        productDelete(id){
+            axios.delete(`api/product/${id}`)
             .then(() => {
-                toast.success('Category Deleted successfully!',{
+                toast.success('Product Deleted successfully!',{
                     autoClose:3000,
                 });
-                this.showCategories();
+                this.show();
             });
             // this.categories.find(element => element > )
         }
     },
     mounted() {
-        this.showCategories();
+        this.show();
     },
 }
 </script>

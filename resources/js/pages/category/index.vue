@@ -14,7 +14,7 @@
                         <th style="width:150px;" class="text-end">Action</th>
                     </thead>
                     <tbody>
-                        <tr v-for="(category, key) in categories" ::key="category.id">
+                        <tr v-for="(category, key) in categories" :key="category.id">
                             <td style="width:100px">{{ key+1 }}</td>
                             <td>{{ category.name }}</td>
                             <td>{{ category.slug }}</td>

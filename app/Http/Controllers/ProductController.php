@@ -31,11 +31,24 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name'=>['required','unique:products,title'],
+            'title'=>['required','unique:products,title'],
+            'price'=>['required'],
+            // 'image'=>['required','image'],
+            'description'=>['required'],
         ]);
+        if ($request->image != null) {
+            $image = $request->image;
+            $imageName = $image->getClientOriginalName();
+            $imageExt = $image->getClientOriginalExtension();
+            $imageUniuqe = md5(rand().time().$imageName).'.'.$imageExt;
+            $image->move(public_path('uploads/images/products/'),$imageUniuqe);
+        }
         Product::create([
-            'name'=>$request->name,
-            'slug'=>Str::slug($request->name),
+            'title'       => $request->title,
+            'slug'        => Str::slug($request->title),
+            'price'       => $request->price,
+            'image'       => 'uploads/images/products/'.$imageUniuqe,
+            'description' => $request->description,
         ]);
         return response()->json([
             'success'=>200
@@ -68,11 +81,32 @@ class ProductController extends Controller
     public function update(Request $request, Product $Product)
     {
         $request->validate([
-            'name'=>['required','unique:products,name,'.$Product->id],
+            'title'=>['required','unique:products,title,'.$Product->id],
+            'price'=>['required'],
+            // 'image'=>['required','image'],
+            'description'=>['required'],
         ]);
-        $Product = $Product->update([
-            'name'=> $request->name,
-            'slug'=>Str::slug($request->name),
+        if ($request->image) {
+            if ($Product->image != null) {
+                file_exists(public_path($Product->image)) ? unlink(public_path($Product->image)) : false;
+            }
+            $image = $request->image;
+            $imageName = $image->getClientOriginalName();
+            $imageExt = $image->getClientOriginalExtension();
+            $imageUniuqe = md5(rand().time().$imageName).'.'.$imageExt;
+            $image->move(public_path('uploads/images/products/'),$imageUniuqe);
+            
+            $imageUniuqe = 'uploads/images/products/'.$imageUniuqe;
+        }else{
+            $imageUniuqe = $Product->image;
+        }
+
+        $Product->update([
+            'title'       => $request->title,
+            'slug'        => Str::slug($request->title),
+            'price'       => $request->price,
+            'image'       => $imageUniuqe,
+            'description' => $request->description,
         ]);
 
         return response()->json($Product,200);
@@ -84,6 +118,9 @@ class ProductController extends Controller
     public function destroy(Product $Product)
     {
         if ($Product) {
+            if ($Product->image != null) {
+                file_exists(public_path($Product->image)) ? unlink(public_path($Product->image)) : false;
+            }
             $Product->delete();
             return response()->json('success',200);
         } else {

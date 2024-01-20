@@ -8,7 +8,7 @@
             <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <router-link class="nav-link active" aria-current="page" :to="{name: 'Home'}">Home</router-link>
+                        <router-link class="nav-link" aria-current="page" :to="{name: 'Home'}">Home</router-link>
                     </li>
                     <li class="nav-item">
                         <router-link class="nav-link" :to="{name:'ProductIndex'}">Products</router-link>

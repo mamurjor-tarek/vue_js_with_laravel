@@ -2,19 +2,38 @@
     <div class="container">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">Edit Category</h5>
-                <router-link :to="{name: 'CategoryIndex'}" class="btn btn-sm btn-primary">List</router-link>
+                <h5 class="mb-0">Edit Product</h5>
+                <router-link :to="{name: 'ProductIndex'}" class="btn btn-sm btn-primary">List</router-link>
             </div>
             <div class="card-body">
-                <form @submit.prevent="updateCategory">
+                <form @submit.prevent="updateProduct" enctype="multipart/form-data">
                     <!-- <AlertError :form="form" /> -->
                     <!-- <AlertSuccess :form="form" message="Create Success!" /> -->
                     <div class="mb-3">
-                        <label for="name" class="form-label">Name</label>
-                        <input id="name" type="text" v-model="form.name" :class="{'is-invalid' : form.errors.has('name')}" name="name" class="form-control" placeholder="Name">
+                        <label for="title" class="form-label">Title</label>
+                        <input id="title" type="text" v-model="form.title" :class="{'is-invalid' : form.errors.has('title')}" name="title" class="form-control" placeholder="Title">
+                        <HasError :form="form" field="title" />
+                    </div>
 
-                        <HasError :form="form" field="name" />
-
+                    <div class="mb-3">
+                        <label for="price" class="form-label">Price</label>
+                        <input id="price" type="text" v-model="form.price" :class="{'is-invalid' : form.errors.has('price')}" name="price" class="form-control" placeholder="Price">
+                        <HasError :form="form" field="price" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="image" class="form-label">Image</label>
+                        <input id="image" type="file" :class="{'is-invalid' : form.errors.has('image')}" name="image" class="form-control" placeholder="Image" @change="handleFile">
+                        <div class="mt-3">
+                            <img style="width:100px;" :src="image" >
+                        </div>
+                        <HasError :form="form" field="image" />
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea id="description" v-model="form.description" :class="{'is-invalid' : form.errors.has('description')}" name="description" class="form-control" placeholder="Description">
+                        </textarea>
+                        <HasError :form="form" field="description" />
                     </div>
                     <div class="text-end">
                         <button type="submit" class="btn btn-success">Update</button>
@@ -32,29 +51,42 @@ export default {
     data() {
         return {
             form: new Form({
-                name: '',
+                title: '',
+                price: '',
+                image: null,
+                description: '',
+                _method: 'put',
             }),
+            image: null
         }
     },
     methods: {
-        editCategory(){
+        handleFile (event) {
+            const file = event.target.files[0];
+            this.form.image = file;
+        },
+        editProduct(){
             let id = this.$route.params.id;
-            axios.get(`/api/category/${id}/edit`).then(response => {
-                this.form.name = response.data.name;
+            axios.get(`/api/product/${id}/edit`).then(response => {
+                this.form.title = response.data.title;
+                this.form.price = response.data.price;
+                this.form.description = response.data.description;
+                this.image = `/${response.data.image}`;
             });
         },
-        updateCategory(){
+        updateProduct(){
             let id = this.$route.params.id;
-            this.form.put(`/api/category/${id}`)
+            this.form.post(`/api/product/${id}`)
             .then(({data}) => {
-                toast.success('Category updated successfully!',{
+                toast.success('Product updated successfully!',{
                     autoClose:3000,
                 });
+                location.reload();
             });
         }
     },
     mounted() {
-        this.editCategory();
+        this.editProduct();
     },
 }
 </script>
