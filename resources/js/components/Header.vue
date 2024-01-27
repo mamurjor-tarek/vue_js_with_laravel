@@ -16,14 +16,30 @@
                     <li class="nav-item">
                         <router-link class="nav-link" :to="{name:'CategoryIndex'}">Category</router-link>
                     </li>
+                    <li class="nav-item">
+                        <router-link class="nav-link" :to="{name:'Login'}">Login</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" @click.prevent="logout()">Logout</a>
+                    </li>
                 </ul>
             </div>
         </div>
     </nav>
 </template>
 <script>
+import { toast } from 'vue3-toastify';
 export default {
-    
+    methods: {
+        logout(){
+            axios.post('/logout')
+            .then(function (response) {
+                toast.success('Logout successfully!',{
+                    autoClose:3000,
+                });
+            })
+        }
+    },
 }
 </script>
 <style lang="">

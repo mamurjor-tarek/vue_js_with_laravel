@@ -2,7 +2,7 @@
     <div class="container">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">Categories</h5>
+                <h5 class="mb-0">Products</h5>
                 <router-link :to="{name: 'ProductCreate'}" class="btn btn-sm btn-primary">Create</router-link>
             </div>
             <div class="card-body">

@@ -9,7 +9,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
         @vite(['resources/js/app.js','resources/css/app.css'])
     </head>
-    <body>
+    <body class="bg-light">
         <div id="app">
             <app-header></app-header>
             <router-view></router-view>

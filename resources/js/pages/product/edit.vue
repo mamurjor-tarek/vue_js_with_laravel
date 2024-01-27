@@ -3,7 +3,7 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="mb-0">Edit Product</h5>
-                <router-link :to="{name: 'ProductIndex'}" class="btn btn-sm btn-primary">List</router-link>
+                <router-link :to="{name: 'ProductIndex'}" class="btn btn-sm btn-primary">Product List</router-link>
             </div>
             <div class="card-body">
                 <form @submit.prevent="updateProduct" enctype="multipart/form-data">
